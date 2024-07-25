@@ -34,6 +34,33 @@ describe('Perfis - Create', () => {
         expect(typeof res1.body).toEqual('number');
     });
 
+    it('Cria registro 3', async () => {
+        const res1 = await testServer
+            .post('/perfis')
+            .set({ Authorization: `Bearer ${accessToken}` })
+            .send({ nome: 'Teste2' });
+        expect(res1.statusCode).toEqual(StatusCodes.CREATED);
+        expect(typeof res1.body).toEqual('number');
+    });
+
+    it('Cria registro 4', async () => {
+        const res1 = await testServer
+            .post('/perfis')
+            .set({ Authorization: `Bearer ${accessToken}` })
+            .send({ nome: 'Teste2' });
+        expect(res1.statusCode).toEqual(StatusCodes.CREATED);
+        expect(typeof res1.body).toEqual('number');
+    });
+
+    it('Tenta criar registro 5', async () => {
+        const res1 = await testServer
+            .post('/perfis')
+            .set({ Authorization: `Bearer ${accessToken}` })
+            .send({ nome: 'Teste2' });
+        expect(res1.statusCode).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
+        expect(res1.body).toHaveProperty('errors.default');
+    });
+
     it('Tenta criar registro com nome muito curto', async () => {
         const res1 = await testServer
             .post('/perfis')
