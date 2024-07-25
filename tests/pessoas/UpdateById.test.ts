@@ -6,9 +6,10 @@ describe('Pessoas - UpdateById', () => {
     beforeAll(async () => {
         const email = 'updatebyid-pessoas@gmail.com';
         const senha = '123456';
+        const dataNascimento = '1980-06-12';
         await testServer
             .post('/cadastrar')
-            .send({ username: 'Teste', email, senha });
+            .send({ nome: 'Teste', email, senha, dataNascimento });
         const signInRes = await testServer
             .post('/entrar')
             .send({ email, senha });
