@@ -7,12 +7,12 @@ export const create = async (
     perfil: Omit<IPerfil, 'id' | 'usuarioId'>
 ): Promise<number | Error> => {
     try {
-        const [{ count }] = await Knex(ETableNames.usuario)
-            .where('id', '=', uid)
+        const [{ count }] = await Knex(ETableNames.perfil)
+            .where('usuarioId', '=', uid)
             .count<[{ count: number }]>('* as count');
 
-        if (count === 0) {
-            return new Error('O usuário usado no cadastro não foi encontrada');
+        if (count >= 4) {
+            return new Error('Você pode ter no máximo 4 perfis');
         }
 
         const [result] = await Knex(ETableNames.perfil)
