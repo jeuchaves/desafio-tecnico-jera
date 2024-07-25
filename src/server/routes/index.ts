@@ -2,6 +2,7 @@ import { Router } from 'express';
 
 import {
     CidadesController,
+    PerfisController,
     PessoasController,
     UsuariosController,
 } from './../controllers';
@@ -87,6 +88,14 @@ router.post(
     '/cadastrar',
     UsuariosController.signUpValidation,
     UsuariosController.signUp
+);
+
+// Perfis
+router.post(
+    '/perfis',
+    ensureAuthenticated,
+    PerfisController.createValidation,
+    PerfisController.create
 );
 
 export { router };
