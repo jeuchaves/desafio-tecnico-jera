@@ -1,8 +1,17 @@
-# API REST NODE E TYPESCRIPT
+# Desafio técnico - JERA
+
+Desenvolver uma aplicação Web ou Mobile para o armazenamento de uma lista de filmes
+que o usuário gostaria de assistir.
 
 ## Como rodar a aplicação
 
-Rode no terminal esse comando:
+1. Instale as dependências:
+
+```
+npm install
+```
+
+2. Inicie a aplicação:
 
 ```
 npm run start
@@ -22,4 +31,12 @@ Após isso você terá a pasta build criada, e então:
 
 ```
 node ./build/index.js
+```
+
+## Testes
+
+Rode no terminal o comando:
+
+```
+npm run test
 ```
