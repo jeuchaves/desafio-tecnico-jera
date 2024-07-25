@@ -72,4 +72,15 @@ describe('Usuarios - Sign Up', () => {
         expect(res1.statusCode).toEqual(StatusCodes.BAD_REQUEST);
         expect(res1.body).toHaveProperty('errors.body.nome');
     });
+
+    it('Tenta criar um registro com dataNascimento no futuro', async () => {
+        const res1 = await testServer.post('/cadastrar').send({
+            nome: 'joaocadastra',
+            email: 'joaocadastranasceudepois@teste.com',
+            senha: '123456',
+            dataNascimento: '2050-06-12',
+        });
+        expect(res1.statusCode).toEqual(StatusCodes.BAD_REQUEST);
+        expect(res1.body).toHaveProperty('errors.body.dataNascimento');
+    });
 });
