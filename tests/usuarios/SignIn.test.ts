@@ -4,9 +4,10 @@ import { testServer } from '../jest.setup';
 describe('Usuarios - Sign In', () => {
     beforeAll(async () => {
         await testServer.post('/cadastrar').send({
-            username: 'joaocarlos',
+            nome: 'joaocarlos',
             email: 'joao.carlos.signin@gmail.com',
             senha: '123456',
+            dataNascimento: '1980-06-12',
         });
     });
     it('Faz login', async () => {
