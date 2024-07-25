@@ -97,5 +97,6 @@ router.post(
     PerfisController.createValidation,
     PerfisController.create
 );
+router.get('/perfis', ensureAuthenticated, PerfisController.getByUid);
 
 export { router };
