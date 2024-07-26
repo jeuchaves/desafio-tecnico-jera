@@ -5,5 +5,5 @@ export interface IWatchList {
     perfilId: number;
     filmeId: number;
     assistido: boolean;
-    detalhes: IFilme;
+    detalhes: IFilme | undefined;
 }

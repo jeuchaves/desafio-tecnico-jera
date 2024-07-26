@@ -3,21 +3,23 @@ import { StatusCodes } from 'http-status-codes';
 import { number, object } from 'yup';
 
 import { validation } from '../../shared/middleware';
-import { WatchListProvider } from '../../database/providers';
+import { FilmesProvider } from '../../database/providers';
 
 interface IQueryProps {
-    limit?: number;
+    page?: number;
+    deep?: number;
 }
 
-export const getAllValidation = validation((getSchema) => ({
+export const suggestedValidation = validation((getSchema) => ({
     query: getSchema<IQueryProps>(
         object({
-            limit: number().moreThan(0),
+            page: number().moreThan(0),
+            deep: number(),
         })
     ),
 }));
 
-export const getAll = async (
+export const suggested = async (
     req: Request<{}, {}, {}, IQueryProps>,
     res: Response
 ) => {
@@ -28,24 +30,22 @@ export const getAll = async (
             .json({ errors: { default: 'Perfil não encontrado' } });
     }
 
-    const result = await WatchListProvider.getAllWithDetails(
-        req.query.limit || 10,
-        perfilId
+    const result = await FilmesProvider.suggested(
+        req.query.page || 1,
+        perfilId,
+        req.query.deep || 2
     );
-    const count = await WatchListProvider.count(perfilId);
 
     if (result instanceof Error) {
         return res
             .status(StatusCodes.INTERNAL_SERVER_ERROR)
             .send(result.message);
-    } else if (count instanceof Error) {
-        return res
-            .status(StatusCodes.INTERNAL_SERVER_ERROR)
-            .send(count.message);
     }
 
     res.setHeader('access-control-expose-headers', 'x-total-count');
-    res.setHeader('x-total-count', count);
+    res.setHeader('x-total-count', result.total_results);
+    res.setHeader('x-total-pages', result.total_pages);
+    res.setHeader('current-page', result.page);
 
-    return res.status(StatusCodes.OK).json(result);
+    return res.status(StatusCodes.OK).json(result.results);
 };

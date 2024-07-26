@@ -3,7 +3,7 @@ import { IWatchList } from '../../models';
 import { Knex } from '../../knex';
 import { FilmesProvider } from '../filmes';
 
-export const getAll = async (
+export const getAllWithDetails = async (
     limit: number,
     perfilId: number
 ): Promise<IWatchList[] | Error> => {
@@ -33,6 +33,23 @@ export const getAll = async (
         }, [] as IWatchList[]);
 
         return watchlistDetalhada;
+    } catch (error) {
+        console.log(error);
+        return new Error('Erro ao consultar os registros');
+    }
+};
+
+export const getAll = async (
+    limit: number,
+    perfilId: number
+): Promise<IWatchList[] | Error> => {
+    try {
+        const result = await Knex(ETableNames.watchlist)
+            .select('*')
+            .where('perfilId', '=', perfilId)
+            .limit(limit);
+
+        return result;
     } catch (error) {
         console.log(error);
         return new Error('Erro ao consultar os registros');

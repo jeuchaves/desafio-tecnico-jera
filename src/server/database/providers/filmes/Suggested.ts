@@ -1,5 +1,6 @@
 import { Api } from '../../../shared/services';
 import { IFilme } from '../../models';
+import { WatchListProvider } from '../watchlist';
 
 interface ISearchData {
     results: IFilme[];
@@ -8,12 +9,31 @@ interface ISearchData {
     page: number;
 }
 
-export const search = async (
+export const suggested = async (
     page: number,
-    filter: string
+    perfilId: number,
+    deep: number
 ): Promise<ISearchData | Error> => {
     try {
-        const urlRelativa = `/search/movie?query=${filter}&page=${page}&language=pt-br`;
+        const filmesParaAssistir = await WatchListProvider.getAll(
+            deep,
+            perfilId
+        );
+
+        if (filmesParaAssistir instanceof Error) {
+            return new Error('Não foi possível localizar sua lista de filmes');
+        }
+
+        if (filmesParaAssistir.length === 0) {
+            return new Error('Não foi possível localizar sua lista de filmes');
+        }
+
+        const indiceAleatorio = Math.floor(
+            Math.random() * filmesParaAssistir.length
+        );
+        const filmeId = filmesParaAssistir[indiceAleatorio].filmeId;
+
+        const urlRelativa = `/movie/${filmeId}/recommendations?language=pt-br&page=${page}`;
         const { data } = await Api.get(urlRelativa);
         if (data) {
             return data as ISearchData;

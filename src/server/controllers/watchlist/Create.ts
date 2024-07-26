@@ -6,7 +6,7 @@ import { WatchListProvider } from '../../database/providers';
 import { validation } from '../../shared/middleware';
 import { IWatchList } from '../../database/models';
 
-interface IBodyProps extends Omit<IWatchList, 'id' | 'perfilId'> {}
+interface IBodyProps extends Omit<IWatchList, 'id' | 'perfilId' | 'detalhes'> {}
 
 export const createValidation = validation((getSchema) => ({
     body: getSchema<IBodyProps>(
