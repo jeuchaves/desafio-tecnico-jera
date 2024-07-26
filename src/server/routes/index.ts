@@ -2,6 +2,7 @@ import { Router } from 'express';
 
 import {
     CidadesController,
+    FilmesController,
     PerfisController,
     PessoasController,
     UsuariosController,
@@ -11,7 +12,7 @@ import { ensureAuthenticated } from '../shared/middleware';
 const router = Router();
 
 router.get('/', (_, res) => {
-    return res.send('Olá, DEV!');
+    return res.send('Desafio técnico - JERA');
 });
 
 // Cidades
@@ -105,4 +106,11 @@ router.post(
     PerfisController.select
 );
 
+// Filmes
+router.get(
+    '/filmes',
+    ensureAuthenticated,
+    FilmesController.searchValidation,
+    FilmesController.search
+);
 export { router };
