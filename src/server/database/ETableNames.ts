@@ -3,4 +3,5 @@ export enum ETableNames {
     pessoa = 'pessoas',
     usuario = 'usuarios',
     perfil = 'perfis',
+    watchlist = 'watchlist',
 }

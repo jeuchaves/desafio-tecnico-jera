@@ -8,6 +8,7 @@ import {
     UsuariosController,
 } from './../controllers';
 import { ensureAuthenticated } from '../shared/middleware';
+import { WatchListController } from '../controllers/watchlist';
 
 const router = Router();
 
@@ -113,4 +114,13 @@ router.get(
     FilmesController.searchValidation,
     FilmesController.search
 );
+
+// WatchList
+router.post(
+    '/filmes/para-assistir',
+    ensureAuthenticated,
+    WatchListController.createValidation,
+    WatchListController.create
+);
+
 export { router };
