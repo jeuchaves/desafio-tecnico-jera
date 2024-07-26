@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { boolean, number, object, string } from 'yup';
+import { boolean, number, object } from 'yup';
 
 import { WatchListProvider } from '../../database/providers';
 import { validation } from '../../shared/middleware';
