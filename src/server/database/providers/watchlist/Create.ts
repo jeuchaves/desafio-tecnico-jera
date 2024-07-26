@@ -1,7 +1,6 @@
 import { ETableNames } from '../../ETableNames';
 import { Knex } from '../../knex';
 import { IWatchList } from '../../models';
-import { FilmesProvider } from '../filmes';
 
 export const create = async (
     watchlist: Omit<IWatchList, 'id'>

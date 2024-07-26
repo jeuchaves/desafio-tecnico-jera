@@ -15,17 +15,18 @@ export async function up(knex: Knex) {
                 .onDelete('RESTRICT');
             table.bigInteger('filmeId').notNullable();
             table.boolean('assistido').defaultTo(false);
+            table.unique(['perfilId', 'filmeId']);
             table.comment(
                 'Tabela usada para armazenar filmes para assistir no sistema'
             );
         })
         .then(() => {
-            console.log(`# Created table ${ETableNames.pessoa}`);
+            console.log(`# Created table ${ETableNames.watchlist}`);
         });
 }
 
 export async function down(knex: Knex) {
-    return knex.schema.dropTable(ETableNames.pessoa).then(() => {
-        console.log(`# Dropped table ${ETableNames.pessoa}`);
+    return knex.schema.dropTable(ETableNames.watchlist).then(() => {
+        console.log(`# Dropped table ${ETableNames.watchlist}`);
     });
 }
