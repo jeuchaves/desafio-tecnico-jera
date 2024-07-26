@@ -128,5 +128,11 @@ router.get(
     WatchListController.getAllValidation,
     WatchListController.getAll
 );
+router.patch(
+    '/filmes/para-assistir/:id/assistido',
+    ensureAuthenticated,
+    WatchListController.markAsWatchedValidation,
+    WatchListController.markAsWatched
+);
 
 export { router };
