@@ -98,5 +98,11 @@ router.post(
     PerfisController.create
 );
 router.get('/perfis', ensureAuthenticated, PerfisController.getByUid);
+router.post(
+    '/perfis/selecionar',
+    ensureAuthenticated,
+    PerfisController.selectValidation,
+    PerfisController.select
+);
 
 export { router };
