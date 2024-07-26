@@ -1,10 +1,10 @@
 import { StatusCodes } from 'http-status-codes';
 import { testServer } from '../jest.setup';
 
-describe('WatchList - GetAll', () => {
+describe('Filmes - Suggested', () => {
     let accessToken = '';
     beforeAll(async () => {
-        const email = 'getall-cidades@gmail.com';
+        const email = 'suggested-filmes@gmail.com';
         const senha = '123456';
         const dataNascimento = '1980-06-12';
         await testServer
@@ -32,7 +32,7 @@ describe('WatchList - GetAll', () => {
         cookie = resSelectPerfil.headers['set-cookie'];
     });
 
-    it('Buscar todos os registros', async () => {
+    it('Busca filmes recomendados', async () => {
         const res1 = await testServer
             .post('/filmes/para-assistir')
             .set({ Authorization: `Bearer ${accessToken}` })
@@ -41,27 +41,22 @@ describe('WatchList - GetAll', () => {
 
         expect(res1.statusCode).toEqual(StatusCodes.CREATED);
 
-        const resBuscada = await testServer
-            .get('/filmes/para-assistir')
+        const resBuscado = await testServer
+            .get('/filmes/sugeridos')
             .set({ Authorization: `Bearer ${accessToken}` })
             .set({ Cookie: cookie })
             .send();
 
-        expect(Number(resBuscada.header['x-total-count'])).toBeGreaterThan(0);
-        expect(resBuscada.statusCode).toEqual(StatusCodes.OK);
-        expect(resBuscada.body.length).toBeGreaterThan(0);
+        expect(Number(resBuscado.header['x-total-count'])).toBeGreaterThan(0);
+        expect(resBuscado.statusCode).toEqual(StatusCodes.OK);
+        expect(resBuscado.body.length).toBeGreaterThan(0);
     });
 
-    it('Tenta buscar todos os registros não estando autenticado', async () => {
-        const res1 = await testServer
-            .post('/filmes/para-assistir')
-            .set({ Authorization: `Bearer ${accessToken}` })
+    it('Tenta buscar filmes sugeridos não estando autenticado', async () => {
+        const resBuscada = await testServer
+            .get('/filmes/sugeridos')
             .set({ Cookie: cookie })
-            .send({ filmeId: '14' });
-
-        expect(res1.statusCode).toEqual(StatusCodes.CREATED);
-
-        const resBuscada = await testServer.get('/filmes/para-assistir').send();
+            .send();
 
         expect(resBuscada.statusCode).toEqual(StatusCodes.UNAUTHORIZED);
         expect(resBuscada.body).toHaveProperty('errors.default');

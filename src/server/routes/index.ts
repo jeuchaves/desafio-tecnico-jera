@@ -114,6 +114,12 @@ router.get(
     FilmesController.searchValidation,
     FilmesController.search
 );
+router.get(
+    '/filmes/sugeridos',
+    ensureAuthenticated,
+    FilmesController.suggestedValidation,
+    FilmesController.suggested
+);
 
 // WatchList
 router.post(

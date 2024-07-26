@@ -3,7 +3,7 @@ import { Knex } from '../../knex';
 import { IWatchList } from '../../models';
 
 export const create = async (
-    watchlist: Omit<IWatchList, 'id'>
+    watchlist: Omit<IWatchList, 'id' | 'detalhes'>
 ): Promise<number | Error> => {
     try {
         const [{ count }] = await Knex(ETableNames.perfil)
