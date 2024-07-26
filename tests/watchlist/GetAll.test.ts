@@ -37,7 +37,7 @@ describe('WatchList - GetAll', () => {
             .post('/filmes/para-assistir')
             .set({ Authorization: `Bearer ${accessToken}` })
             .set({ Cookie: cookie })
-            .send({ filmeId: '1' });
+            .send({ filmeId: '2' });
 
         expect(res1.statusCode).toEqual(StatusCodes.CREATED);
 
@@ -57,7 +57,7 @@ describe('WatchList - GetAll', () => {
             .post('/filmes/para-assistir')
             .set({ Authorization: `Bearer ${accessToken}` })
             .set({ Cookie: cookie })
-            .send({ filmeId: '2' });
+            .send({ filmeId: '14' });
 
         expect(res1.statusCode).toEqual(StatusCodes.CREATED);
 
