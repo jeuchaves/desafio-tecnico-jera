@@ -122,5 +122,11 @@ router.post(
     WatchListController.createValidation,
     WatchListController.create
 );
+router.get(
+    '/filmes/para-assistir',
+    ensureAuthenticated,
+    WatchListController.getAllValidation,
+    WatchListController.getAll
+);
 
 export { router };
