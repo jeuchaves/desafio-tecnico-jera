@@ -16,6 +16,7 @@ describe('WatchList - Create', () => {
         accessToken = signInRes.body.accessToken;
     });
 
+    let cookie: string;
     beforeAll(async () => {
         const resPerfil = await testServer
             .post('/perfis')
@@ -23,16 +24,19 @@ describe('WatchList - Create', () => {
             .send({ nome: 'Teste2' });
         const perfilId = resPerfil.body;
 
-        await testServer
+        const resSelectPerfil = await testServer
             .post('/perfis/selecionar')
             .set({ Authorization: `Bearer ${accessToken}` })
             .send({ perfilId });
+
+        cookie = resSelectPerfil.headers['set-cookie'];
     });
 
     it('Cria registro', async () => {
         const res1 = await testServer
             .post('/filmes/para-assistir')
             .set({ Authorization: `Bearer ${accessToken}` })
+            .set({ Cookie: cookie })
             .send({ filmeId: '1' });
         expect(res1.statusCode).toEqual(StatusCodes.CREATED);
         expect(typeof res1.body).toEqual('number');
@@ -42,6 +46,7 @@ describe('WatchList - Create', () => {
         const res1 = await testServer
             .post('/filmes/para-assistir')
             .set({ Authorization: `Bearer ${accessToken}` })
+            .set({ Cookie: cookie })
             .send({ filmeId: '2' });
         expect(res1.statusCode).toEqual(StatusCodes.CREATED);
         expect(typeof res1.body).toEqual('number');
@@ -51,6 +56,7 @@ describe('WatchList - Create', () => {
         const res1 = await testServer
             .post('/filmes/para-assistir')
             .set({ Authorization: `Bearer ${accessToken}` })
+            .set({ Cookie: cookie })
             .send({ filmeId: '2' });
         expect(res1.statusCode).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
         expect(res1.body).toHaveProperty('errors.default');
@@ -60,6 +66,7 @@ describe('WatchList - Create', () => {
         const res1 = await testServer
             .post('/filmes/para-assistir')
             .set({ Authorization: `Bearer ${accessToken}` })
+            .set({ Cookie: cookie })
             .send();
         expect(res1.statusCode).toEqual(StatusCodes.BAD_REQUEST);
         expect(res1.body).toHaveProperty('errors.body.filmeId');
@@ -68,6 +75,7 @@ describe('WatchList - Create', () => {
     it('Tenta criar registro não estando autenticado', async () => {
         const res1 = await testServer
             .post('/filmes/para-assistir')
+            .set({ Cookie: cookie })
             .send({ filmeId: '4' });
         expect(res1.statusCode).toEqual(StatusCodes.UNAUTHORIZED);
         expect(res1.body).toHaveProperty('errors.default');
