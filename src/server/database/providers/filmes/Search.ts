@@ -13,7 +13,7 @@ export const search = async (
     filter: string
 ): Promise<ISearchData | Error> => {
     try {
-        const urlRelativa = `/search/movie?query=${filter}&page=${page}`;
+        const urlRelativa = `/search/movie?query=${filter}&page=${page}&language=pt-br`;
         const { data } = await Api.get(urlRelativa);
         if (data) {
             return data as ISearchData;
