@@ -8,6 +8,7 @@ import {
     UsuariosController,
 } from './../controllers';
 import { ensureAuthenticated } from '../shared/middleware';
+import { WatchListController } from '../controllers/watchlist';
 
 const router = Router();
 
@@ -113,4 +114,25 @@ router.get(
     FilmesController.searchValidation,
     FilmesController.search
 );
+
+// WatchList
+router.post(
+    '/filmes/para-assistir',
+    ensureAuthenticated,
+    WatchListController.createValidation,
+    WatchListController.create
+);
+router.get(
+    '/filmes/para-assistir',
+    ensureAuthenticated,
+    WatchListController.getAllValidation,
+    WatchListController.getAll
+);
+router.patch(
+    '/filmes/para-assistir/:id/assistido',
+    ensureAuthenticated,
+    WatchListController.markAsWatchedValidation,
+    WatchListController.markAsWatched
+);
+
 export { router };
