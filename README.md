@@ -99,3 +99,32 @@ Para executar os testes, use o comando:
 ```
 npm run test
 ```
+
+## Sobre o Autor
+
+### Jeú Chaves
+
+Desenvolvedor apaixonado por tecnologia e inovação, com experiência em criar soluções eficientes e escaláveis. Tenho expertise em desenvolvimento frontend com Vue.js e React, além de habilidades sólidas em backend com Express e gerenciamento de banco de dados.
+
+### Projetos Relevantes:
+
+-   **Sistema de Gerenciamento de Eventos (UFMS)**: Desenvolvido com Vue.js, inclui API backend própria com autenticação, permissões e segurança.
+-   **Sistema de Gerenciamento Financeiro (MVP)**: Desenvolvido em React, focado em facilitar o controle financeiro pessoal.
+
+### Experiência:
+
+-   **Frontend**: Vue.js, React
+-   **Backend**: Express, Node.js
+-   **Ferramentas**: date-fns, Axios, JWT, Knex
+-   **Banco de Dados**: PostgreSQL
+
+### Formação:
+
+-   Em reta final da faculdade, com sólida formação em programação e engenharia de software.
+
+### Contato:
+
+-   **LinkedIn**: Seu LinkedIn
+-   **GitHub**: Seu GitHub
+
+Estou sempre aberto a novos desafios e oportunidades para contribuir com projetos inovadores.
