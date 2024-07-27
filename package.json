@@ -1,7 +1,7 @@
 {
-    "name": "api-rest-node-typescript",
+    "name": "desafio-tecnico-jera",
     "version": "1.0.0",
-    "description": "",
+    "description": "A JERA Movie API é uma aplicação backend desenvolvida para gerenciar uma lista de filmes que o usuário gostaria de assistir.",
     "main": "index.js",
     "scripts": {
         "test": "jest",
