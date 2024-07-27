@@ -1,4 +1,6 @@
 import express from 'express';
+import cors from 'cors';
+import 'dotenv/config';
 
 import { sessionConfig } from './shared/services';
 import './shared/services/TranslationsYup';
@@ -12,6 +14,7 @@ declare module 'express-session' {
 const server = express();
 
 server.use(sessionConfig);
+server.use(cors());
 server.use(express.json());
 server.use(router);
 
