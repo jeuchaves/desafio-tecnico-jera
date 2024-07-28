@@ -14,7 +14,12 @@ declare module 'express-session' {
 const server = express();
 
 server.use(sessionConfig);
-server.use(cors());
+server.use(
+    cors({
+        origin: 'http://localhost:3000',
+        credentials: true,
+    })
+);
 server.use(express.json());
 server.use(router);
 
