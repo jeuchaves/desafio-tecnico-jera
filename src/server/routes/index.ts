@@ -37,7 +37,7 @@ router.get('/perfis', ensureAuthenticated, PerfisController.getByUid);
 
 // Filmes
 router.get(
-    '/filmes',
+    '/filmes/:perfilId/buscar',
     ensureAuthenticated,
     FilmesController.searchValidation,
     FilmesController.search
