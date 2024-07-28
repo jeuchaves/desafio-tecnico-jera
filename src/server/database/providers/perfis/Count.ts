@@ -1,11 +1,11 @@
 import { ETableNames } from '../../ETableNames';
 import { Knex } from '../../knex';
 
-export const count = async (): Promise<number | Error> => {
+export const count = async (usuarioId: number): Promise<number | Error> => {
     try {
-        const [{ count }] = await Knex(ETableNames.perfil).count<
-            [{ count: number }]
-        >('* as count');
+        const [{ count }] = await Knex(ETableNames.perfil)
+            .where('usuarioId', '=', usuarioId)
+            .count<[{ count: number }]>('* as count');
 
         if (Number.isInteger(Number(count))) return Number(count);
 
