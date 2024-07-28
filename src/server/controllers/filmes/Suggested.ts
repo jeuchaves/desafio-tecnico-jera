@@ -39,7 +39,7 @@ export const suggested = async (
     if (result instanceof Error) {
         return res
             .status(StatusCodes.INTERNAL_SERVER_ERROR)
-            .send(result.message);
+            .send({ errors: { default: result.message } });
     }
 
     res.setHeader('access-control-expose-headers', 'x-total-count');
