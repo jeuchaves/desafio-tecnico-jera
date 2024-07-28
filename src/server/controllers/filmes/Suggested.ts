@@ -7,7 +7,6 @@ import { FilmesProvider } from '../../database/providers';
 
 interface IQueryProps {
     page?: number;
-    deeps?: number;
 }
 
 interface IParamProps {
@@ -39,8 +38,7 @@ export const suggested = async (
     }
     const result = await FilmesProvider.suggested(
         req.params.perfilId,
-        req.query.page || 1,
-        req.query.deeps || 2
+        req.query.page || 1
     );
 
     if (result instanceof Error) {

@@ -11,21 +11,22 @@ interface ISearchData {
 
 export const suggested = async (
     perfilId: number,
-    page: number,
-    deeps: number
+    page: number
 ): Promise<ISearchData | Error> => {
     try {
-        const filmesParaAssistir = await WatchListProvider.getAll(
-            deeps,
-            perfilId
-        );
+        const filmesParaAssistir = await WatchListProvider.getAll(10, perfilId);
 
         if (filmesParaAssistir instanceof Error) {
             return new Error('Não foi possível localizar sua lista de filmes');
         }
 
         if (filmesParaAssistir.length === 0) {
-            return new Error('Não foi possível localizar sua lista de filmes');
+            return {
+                results: [],
+                total_pages: 0,
+                total_results: 0,
+                page: 1,
+            } as ISearchData;
         }
 
         const indiceAleatorio = Math.floor(
