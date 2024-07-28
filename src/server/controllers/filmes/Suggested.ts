@@ -7,33 +7,40 @@ import { FilmesProvider } from '../../database/providers';
 
 interface IQueryProps {
     page?: number;
-    deep?: number;
+    deeps?: number;
+}
+
+interface IParamProps {
+    perfilId?: number;
 }
 
 export const suggestedValidation = validation((getSchema) => ({
     query: getSchema<IQueryProps>(
         object({
             page: number().moreThan(0),
-            deep: number(),
+            deeps: number(),
+        })
+    ),
+    params: getSchema<IParamProps>(
+        object({
+            perfilId: number().required().integer(),
         })
     ),
 }));
 
 export const suggested = async (
-    req: Request<{}, {}, {}, IQueryProps>,
+    req: Request<IParamProps, {}, {}, IQueryProps>,
     res: Response
 ) => {
-    const perfilId = req.session.perfilId;
-    if (!perfilId) {
-        return res
-            .status(StatusCodes.BAD_REQUEST)
-            .json({ errors: { default: 'Perfil não encontrado' } });
+    if (!req.params.perfilId) {
+        return res.status(StatusCodes.BAD_REQUEST).json({
+            errors: { default: 'O parâmetro "perfilId" precisa ser informado' },
+        });
     }
-
     const result = await FilmesProvider.suggested(
+        req.params.perfilId,
         req.query.page || 1,
-        perfilId,
-        req.query.deep || 2
+        req.query.deeps || 2
     );
 
     if (result instanceof Error) {

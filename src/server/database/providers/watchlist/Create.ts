@@ -1,21 +1,28 @@
 import { ETableNames } from '../../ETableNames';
 import { Knex } from '../../knex';
-import { IWatchList } from '../../models';
+import { FilmesProvider } from '../filmes';
 
 export const create = async (
-    watchlist: Omit<IWatchList, 'id' | 'detalhes'>
+    perfilId: number,
+    filmeId: number
 ): Promise<number | Error> => {
     try {
         const [{ count }] = await Knex(ETableNames.perfil)
-            .where('id', '=', watchlist.perfilId)
+            .where('id', '=', perfilId)
             .count<[{ count: number }]>('* as count');
 
         if (count === 0) {
             return new Error('O perfil usado no cadastro não foi encontrado');
         }
 
+        const resultFilme = await FilmesProvider.getById(filmeId);
+        if (resultFilme instanceof Error) {
+            console.error(resultFilme.message);
+            return new Error('O filme com esse id não foi encontrado');
+        }
+
         const [result] = await Knex(ETableNames.watchlist)
-            .insert(watchlist)
+            .insert({ filmeId, perfilId })
             .returning('id');
         if (typeof result === 'object') {
             return result.id;

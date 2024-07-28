@@ -16,35 +16,26 @@ describe('Filmes - Suggested', () => {
         accessToken = signInRes.body.accessToken;
     });
 
-    let cookie: string;
+    let perfilId: number;
     beforeAll(async () => {
         const resPerfil = await testServer
             .post('/perfis')
             .set({ Authorization: `Bearer ${accessToken}` })
             .send({ nome: 'Teste2' });
-        const perfilId = resPerfil.body;
-
-        const resSelectPerfil = await testServer
-            .post('/perfis/selecionar')
-            .set({ Authorization: `Bearer ${accessToken}` })
-            .send({ perfilId });
-
-        cookie = resSelectPerfil.headers['set-cookie'];
+        perfilId = resPerfil.body;
     });
 
     it('Busca filmes recomendados', async () => {
         const res1 = await testServer
-            .post('/filmes/para-assistir')
+            .post(`/filmes/${perfilId}/para-assistir/2`)
             .set({ Authorization: `Bearer ${accessToken}` })
-            .set({ Cookie: cookie })
-            .send({ filmeId: '2' });
+            .send();
 
         expect(res1.statusCode).toEqual(StatusCodes.CREATED);
 
         const resBuscado = await testServer
-            .get('/filmes/sugeridos')
+            .get(`/filmes/${perfilId}/sugeridos`)
             .set({ Authorization: `Bearer ${accessToken}` })
-            .set({ Cookie: cookie })
             .send();
 
         expect(Number(resBuscado.header['x-total-count'])).toBeGreaterThan(0);
@@ -54,8 +45,7 @@ describe('Filmes - Suggested', () => {
 
     it('Tenta buscar filmes sugeridos não estando autenticado', async () => {
         const resBuscada = await testServer
-            .get('/filmes/sugeridos')
-            .set({ Cookie: cookie })
+            .get(`/filmes/${perfilId}/sugeridos`)
             .send();
 
         expect(resBuscada.statusCode).toEqual(StatusCodes.UNAUTHORIZED);

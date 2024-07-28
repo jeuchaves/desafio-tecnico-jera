@@ -29,12 +29,6 @@ export const markAsWatched = async (
         });
     }
 
-    if (!req.session.perfilId) {
-        return res
-            .status(StatusCodes.BAD_REQUEST)
-            .json({ errors: { default: 'Perfil não encontrado' } });
-    }
-
     const result = await WatchListProvider.markAsWatched(req.params.id);
     if (result instanceof Error) {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({

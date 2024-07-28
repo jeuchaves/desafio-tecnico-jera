@@ -10,13 +10,13 @@ interface ISearchData {
 }
 
 export const suggested = async (
-    page: number,
     perfilId: number,
-    deep: number
+    page: number,
+    deeps: number
 ): Promise<ISearchData | Error> => {
     try {
         const filmesParaAssistir = await WatchListProvider.getAll(
-            deep,
+            deeps,
             perfilId
         );
 

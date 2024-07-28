@@ -4,7 +4,7 @@ import { testServer } from '../jest.setup';
 describe('WatchList - MarkAsWatched', () => {
     let accessToken = '';
     beforeAll(async () => {
-        const email = 'updatebyid-cidades@gmail.com';
+        const email = 'markaswatched-watchlist@gmail.com';
         const senha = '123456';
         const dataNascimento = '1980-06-12';
         await testServer
@@ -16,35 +16,26 @@ describe('WatchList - MarkAsWatched', () => {
         accessToken = signInRes.body.accessToken;
     });
 
-    let cookie: string;
+    let perfilId: number;
     beforeAll(async () => {
         const resPerfil = await testServer
             .post('/perfis')
             .set({ Authorization: `Bearer ${accessToken}` })
             .send({ nome: 'Teste2' });
-        const perfilId = resPerfil.body;
-
-        const resSelectPerfil = await testServer
-            .post('/perfis/selecionar')
-            .set({ Authorization: `Bearer ${accessToken}` })
-            .send({ perfilId });
-
-        cookie = resSelectPerfil.headers['set-cookie'];
+        perfilId = resPerfil.body;
     });
 
     it('Marca registro como assistido', async () => {
         const res1 = await testServer
-            .post('/filmes/para-assistir')
+            .post(`/filmes/${perfilId}/para-assistir/2`)
             .set({ Authorization: `Bearer ${accessToken}` })
-            .set({ Cookie: cookie })
-            .send({ filmeId: '1' });
+            .send();
 
         expect(res1.statusCode).toEqual(StatusCodes.CREATED);
 
         const resAssistido = await testServer
-            .patch(`/filmes/para-assistir/${res1.body}/assistido`)
+            .patch(`/filmes/${perfilId}/para-assistir/${res1.body}/assistido`)
             .set({ Authorization: `Bearer ${accessToken}` })
-            .set({ Cookie: cookie })
             .send();
 
         expect(resAssistido.statusCode).toEqual(StatusCodes.NO_CONTENT);
@@ -52,9 +43,8 @@ describe('WatchList - MarkAsWatched', () => {
 
     it('Tenta marcar registro que não existe como assistido', async () => {
         const resAssistido = await testServer
-            .patch('/filmes/para-assistir/999/assistido')
+            .patch(`/filmes/${perfilId}/para-assistir/999/assistido`)
             .set({ Authorization: `Bearer ${accessToken}` })
-            .set({ Cookie: cookie })
             .send();
 
         expect(resAssistido.statusCode).toEqual(
@@ -63,36 +53,16 @@ describe('WatchList - MarkAsWatched', () => {
         expect(resAssistido.body).toHaveProperty('errors.default');
     });
 
-    it('Tenta marcar registro sem perfil selecionado', async () => {
+    it('Tenta marcar registro não estando autenticado', async () => {
         const res1 = await testServer
-            .post('/filmes/para-assistir')
-            .set({ Authorization: `Bearer ${accessToken}` })
-            .set({ Cookie: cookie })
-            .send({ filmeId: '2' });
-
-        expect(res1.statusCode).toEqual(StatusCodes.CREATED);
-
-        const resAssistido = await testServer
-            .patch(`/filmes/para-assistir/${res1.body}/assistido`)
+            .post(`/filmes/${perfilId}/para-assistir/14`)
             .set({ Authorization: `Bearer ${accessToken}` })
             .send();
 
-        expect(resAssistido.statusCode).toEqual(StatusCodes.BAD_REQUEST);
-        expect(resAssistido.body).toHaveProperty('errors.default');
-    });
-
-    it('Tenta marcar registro não estando autenticado', async () => {
-        const res1 = await testServer
-            .post('/filmes/para-assistir')
-            .set({ Authorization: `Bearer ${accessToken}` })
-            .set({ Cookie: cookie })
-            .send({ filmeId: '3' });
-
         expect(res1.statusCode).toEqual(StatusCodes.CREATED);
 
         const resAssistido = await testServer
-            .patch(`/filmes/para-assistir/${res1.body}/assistido`)
-            .set({ Cookie: cookie })
+            .patch(`/filmes/${perfilId}/para-assistir/${res1.body}/assistido`)
             .send();
 
         expect(resAssistido.statusCode).toEqual(StatusCodes.UNAUTHORIZED);
