@@ -1,33 +1,40 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { boolean, number, object } from 'yup';
+import { number, object } from 'yup';
 
 import { WatchListProvider } from '../../database/providers';
 import { validation } from '../../shared/middleware';
-import { IWatchList } from '../../database/models';
 
-interface IBodyProps extends Omit<IWatchList, 'id' | 'perfilId' | 'detalhes'> {}
+interface IParamProps {
+    perfilId?: number;
+    filmeId?: number;
+}
 
 export const createValidation = validation((getSchema) => ({
-    body: getSchema<IBodyProps>(
+    params: getSchema<IParamProps>(
         object({
-            filmeId: number().integer().required(),
-            assistido: boolean().default(false),
+            perfilId: number().required().integer(),
+            filmeId: number().required().integer(),
         })
     ),
 }));
 
-export const create = async (
-    req: Request<{}, {}, IBodyProps>,
-    res: Response
-) => {
-    const perfilId = req.session.perfilId;
-    if (!perfilId) {
-        return res
-            .status(StatusCodes.BAD_REQUEST)
-            .json({ errors: { default: 'Perfil não encontrado' } });
+export const create = async (req: Request<IParamProps>, res: Response) => {
+    if (!req.params.perfilId) {
+        return res.status(StatusCodes.BAD_REQUEST).json({
+            errors: { default: 'O parâmetro "perfilId" precisa ser informado' },
+        });
     }
-    const result = await WatchListProvider.create({ ...req.body, perfilId });
+
+    if (!req.params.filmeId) {
+        return res.status(StatusCodes.BAD_REQUEST).json({
+            errors: { default: 'O parâmetro "filmeId" precisa ser informado' },
+        });
+    }
+    const result = await WatchListProvider.create(
+        req.params.perfilId,
+        req.params.filmeId
+    );
     if (result instanceof Error) {
         return res
             .status(StatusCodes.INTERNAL_SERVER_ERROR)

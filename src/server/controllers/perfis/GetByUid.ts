@@ -5,6 +5,7 @@ import { PerfisProvider } from '../../database/providers';
 
 export const getByUid = async (req: Request, res: Response) => {
     const uid = Number(req.headers.idUsuario);
+
     const result = await PerfisProvider.getByUid(uid);
     const count = await PerfisProvider.count(uid);
 

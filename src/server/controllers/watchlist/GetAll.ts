@@ -9,30 +9,37 @@ interface IQueryProps {
     limit?: number;
 }
 
+interface IParamProps {
+    perfilId?: number;
+}
+
 export const getAllValidation = validation((getSchema) => ({
     query: getSchema<IQueryProps>(
         object({
             limit: number().moreThan(0),
         })
     ),
+    params: getSchema<IParamProps>(
+        object({
+            perfilId: number().required().integer(),
+        })
+    ),
 }));
 
 export const getAll = async (
-    req: Request<{}, {}, {}, IQueryProps>,
+    req: Request<IParamProps, {}, {}, IQueryProps>,
     res: Response
 ) => {
-    const perfilId = req.session.perfilId;
-    if (!perfilId) {
-        return res
-            .status(StatusCodes.BAD_REQUEST)
-            .json({ errors: { default: 'Perfil não encontrado' } });
+    if (!req.params.perfilId) {
+        return res.status(StatusCodes.BAD_REQUEST).json({
+            errors: { default: 'O parâmetro "perfilId" precisa ser informado' },
+        });
     }
-
     const result = await WatchListProvider.getAllWithDetails(
         req.query.limit || 10,
-        perfilId
+        req.params.perfilId
     );
-    const count = await WatchListProvider.count(perfilId);
+    const count = await WatchListProvider.count(req.params.perfilId);
 
     if (result instanceof Error) {
         return res
