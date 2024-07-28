@@ -34,7 +34,10 @@ export const search = async (
             .send(result.message);
     }
 
-    res.setHeader('access-control-expose-headers', 'x-total-count');
+    res.setHeader(
+        'access-control-expose-headers',
+        'x-total-count, x-total-pages'
+    );
     res.setHeader('x-total-count', result.total_results);
     res.setHeader('x-total-pages', result.total_pages);
     res.setHeader('current-page', result.page);
