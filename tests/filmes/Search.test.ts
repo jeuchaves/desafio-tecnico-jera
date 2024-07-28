@@ -16,9 +16,18 @@ describe('Filmes - Search', () => {
         accessToken = signInRes.body.accessToken;
     });
 
+    let perfilId: number;
+    beforeAll(async () => {
+        const resPerfil = await testServer
+            .post('/perfis')
+            .set({ Authorization: `Bearer ${accessToken}` })
+            .send({ nome: 'Teste2' });
+        perfilId = resPerfil.body;
+    });
+
     it('Buscar todos os registros', async () => {
         const resBuscada = await testServer
-            .get('/filmes?filter=crepusculo&page=1')
+            .get(`/filmes/${perfilId}/buscar?filter=crepusculo&page=1`)
             .set({ Authorization: `Bearer ${accessToken}` })
             .send();
 
@@ -28,7 +37,9 @@ describe('Filmes - Search', () => {
     });
 
     it('Tenta buscar todos os registros não estando autenticado', async () => {
-        const resBuscada = await testServer.get('/filmes').send();
+        const resBuscada = await testServer
+            .get(`/filmes/${perfilId}/buscar?filter=ariel&page=1`)
+            .send();
 
         expect(resBuscada.statusCode).toEqual(StatusCodes.UNAUTHORIZED);
         expect(resBuscada.body).toHaveProperty('errors.default');
