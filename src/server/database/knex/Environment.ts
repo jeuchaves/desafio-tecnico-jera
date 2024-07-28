@@ -17,9 +17,9 @@ export const development: Knex.Config = {
     migrations: {
         directory: path.resolve(__dirname, '..', 'migrations'),
     },
-    seeds: {
-        directory: path.resolve(__dirname, '..', 'seeds'),
-    },
+    // seeds: {
+    //     directory: path.resolve(__dirname, '..', 'seeds'),
+    // },
     pool: {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         afterCreate: (connection: any, done: Function) => {
@@ -39,9 +39,9 @@ export const production: Knex.Config = {
     migrations: {
         directory: path.resolve(__dirname, '..', 'migrations'),
     },
-    seeds: {
-        directory: path.resolve(__dirname, '..', 'seeds'),
-    },
+    // seeds: {
+    //     directory: path.resolve(__dirname, '..', 'seeds'),
+    // },
     connection: {
         host: process.env.DATABASE_HOST,
         user: process.env.DATABASE_USER,
